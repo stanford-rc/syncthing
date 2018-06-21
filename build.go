@@ -618,7 +618,7 @@ func buildSnap(target target) {
 	snaparch := goarch
 	if snaparch == "armhf" {
 		goarch = "arm"
-	} else if snapcraft == "i386" {
+	} else if snaparch == "i386" {
 		goarch = "386"
 	}
 	snapver := version
