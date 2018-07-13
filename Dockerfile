@@ -30,5 +30,5 @@ HEALTHCHECK --interval=1m --timeout=10s \
   CMD nc -z localhost 8384 || exit 1
 
 ENTRYPOINT umask "$UMASK" \
-    && chown $PUID:$PGID /var/syncthing \
+    && chown $PUID:$PGID "$SYNCDIR" \
     && su-exec $PUID:$PGID /bin/syncthing -home /var/syncthing/config -gui-address 0.0.0.0:8384
