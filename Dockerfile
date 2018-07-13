@@ -12,7 +12,8 @@ FROM alpine
 
 EXPOSE 8384 22000 21027/udp
 
-VOLUME ["/var/syncthing"]
+ENV SYNCDIR=/var/syncthing
+VOLUME ["$SYNCDIR"]
 
 RUN apk add --no-cache ca-certificates
 
@@ -23,9 +24,11 @@ RUN apk add --no-cache su-exec
 ENV STNOUPGRADE=1
 ENV PUID=1000
 ENV PGID=1000
+ENV UMASK=022
 
 HEALTHCHECK --interval=1m --timeout=10s \
   CMD nc -z localhost 8384 || exit 1
 
-ENTRYPOINT chown $PUID:$PGID /var/syncthing \
+ENTRYPOINT umask "$UMASK" \
+    && chown $PUID:$PGID /var/syncthing \
     && su-exec $PUID:$PGID /bin/syncthing -home /var/syncthing/config -gui-address 0.0.0.0:8384
